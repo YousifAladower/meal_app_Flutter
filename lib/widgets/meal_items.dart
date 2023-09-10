@@ -4,12 +4,14 @@ import 'package:meal_app/screens/meal_detial_screen.dart';
 
 class MealItem extends StatelessWidget {
   
+final String id;
 final String imageUrl;
 final String title;
   final int duration;
     final Complexity complexity;
   final Affordability affordability;
   MealItem({
+     required this.id,
      required this.imageUrl,
     required this.title , 
     required this.duration, 
@@ -43,7 +45,8 @@ final String title;
 void selectMeal( BuildContext ctx )
 {
   Navigator.of(ctx).pushNamed(
-    MealDetialScreen.routName
+    MealDetialScreen.routName,
+    arguments: id,
     
   );
 
@@ -74,7 +77,7 @@ void selectMeal( BuildContext ctx )
                     width: 300,
                     color: Colors.black54,
                     padding: EdgeInsets.symmetric(vertical: 5,horizontal: 20),
-                    child: Text(title,style: TextStyle(fontSize: 20,color: Colors.white),
+                    child: Text(title,style: TextStyle(fontSize: 18,color: Colors.white),
                     softWrap: true,
                     overflow: TextOverflow.fade,
                     ),

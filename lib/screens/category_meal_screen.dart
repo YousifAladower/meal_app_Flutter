@@ -28,6 +28,7 @@ class _MyWidgetState extends State<CategoryMealScreen> {
       body: ListView.builder(
         itemBuilder:(ctx,index){
        return MealItem(
+        id:categoyMeals[index].id ,
         imageUrl: categoyMeals[index].imageUrl,
         title: categoyMeals[index].title,
         duration: categoyMeals[index].duration,
