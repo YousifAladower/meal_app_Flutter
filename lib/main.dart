@@ -1,16 +1,91 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:meal_app/1.1%20dummy_data.dart';
+import 'package:meal_app/models/meal.dart';
 import 'package:meal_app/screens/categoriesScreen.dart';
 import 'package:meal_app/screens/category_meal_screen.dart';
+import 'package:meal_app/screens/fitters_screen.dart';
 import 'package:meal_app/screens/meal_detial_screen.dart';
+import 'package:meal_app/screens/tabs_screen.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
+Map<String,bool > _filters ={
+  'gluten':false,
+  'lotose':false,
+  'vengan':false,
+  'vegetarian':false,
+
+
+};
+List<Meal> _availableMeals=DUMMY_MEALS;
+List<Meal> _favortieMeals=[];
+
+void setFilters (Map<String,bool > _fiterData)
+{
+  setState(() {
+    _filters=_fiterData;
+    _availableMeals=DUMMY_MEALS.where((meal) {
+      if(_filters['gluten']==true && meal.isGlutenFree==false)
+      {
+        return false;
+      }
+      if(_filters['lotose']==true && meal.isLactoseFree==false)
+      {
+        return false;
+      }
+      if(_filters['vengan']==true && meal.isVegan==false)
+      {
+        return false;
+      }
+      if(_filters['vegetarian']==true && meal.isVegetarian==false)
+      {
+        return false;
+      }
+      return true ;
+    }).toList();
+  });
+
+}
+
+void _toggleFavorite(String mealId)
+{
+ final existingIndex= _favortieMeals.indexWhere((meal) => meal.id==mealId);
+
+ if(existingIndex >= 0)
+ {
+  setState(() {
+    _favortieMeals.removeAt(existingIndex);
+  });
+ }
+ else {
+  setState(() {
+    _favortieMeals.add(DUMMY_MEALS.firstWhere((meal) => meal.id==mealId));
+  });
+ }
+
+
+
+}
+
+bool _isMealFavorite(String id)
+{
+  return _favortieMeals.any((meal) => meal.id==id);
+
+}
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,9 +107,10 @@ class MyApp extends StatelessWidget {
       ),
       //home: CategoriesScreen(),
       routes: {
-        '/': (context)=>CategoriesScreen(),
-        CategoryMealScreen.routName:(context) => CategoryMealScreen(),
-        MealDetialScreen.routName:(context) => MealDetialScreen()
+        '/': (context)=>TabsScreen(_favortieMeals),
+        CategoryMealScreen.routName:(context) => CategoryMealScreen(_availableMeals),
+        MealDetialScreen.routName:(context) => MealDetialScreen(_toggleFavorite,_isMealFavorite),
+        FilterScreen.routeName:(context) => FilterScreen(setFilters,_filters)
       },
     );
   }

@@ -3,7 +3,9 @@ import 'package:meal_app/1.1%20dummy_data.dart';
 import 'package:meal_app/widgets/meal_items.dart';
 
 class MealDetialScreen extends StatelessWidget {
-  const MealDetialScreen({super.key});
+  final Function toggleFavorite;
+  final Function isMealFavorite;
+  const MealDetialScreen(this.toggleFavorite,this.isMealFavorite);
 
 static const routName="mealDetialscreen";
 Widget buildSelectionTitle(BuildContext context ,String text)
@@ -79,6 +81,12 @@ Widget builContainer(Widget _child)
               ),),
         ]),
       ) ,
+      floatingActionButton: FloatingActionButton(
+        onPressed:()=>toggleFavorite(maelId) ,
+        child: Icon(
+          isMealFavorite(maelId)?Icons.star :Icons.star_border
+        ),
+        ),
     );
   }
 }

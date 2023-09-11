@@ -10,13 +10,15 @@ final String title;
   final int duration;
     final Complexity complexity;
   final Affordability affordability;
+
   MealItem({
      required this.id,
      required this.imageUrl,
     required this.title , 
     required this.duration, 
     required this.complexity, 
-    required this.affordability
+    required this.affordability,
+
   }
    
   );
@@ -48,7 +50,13 @@ void selectMeal( BuildContext ctx )
     MealDetialScreen.routName,
     arguments: id,
     
+  ).then((repons) {
+  //if(repons!=null) removeItem(repons);
+  
+    }
   );
+
+
 
 }
   @override
